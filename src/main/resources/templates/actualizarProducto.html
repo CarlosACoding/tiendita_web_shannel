@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Producto</title>
+    <!-- Bootstrap CSS -->
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/css/swiper-bundle.min.css}">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"> -->
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-5-3-3/css/bootstrap.min.css}" >
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+        <!-- Agregar jQuery desde CDN -->
+    
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/vendor.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            margin-top: 30px;
+            max-width: 900px;
+            position: relative;
+        }
+        h2 {
+            color: #6c757d;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        .form-control, .form-control-file, .btn-primary {
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        label {
+            font-weight: bold;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* Estilo para el botón "Guardar Producto" */
+        .btn-top-right {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #219ebc;
+            border: none;
+            font-weight: bold;
+            color: #fff;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-top-right:hover {
+            background-color: #1c7fa2;
+        }
+
+        /* Vista previa de la imagen */
+        #vista-previa {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #imagen-vista-previa {
+            width: 250px; /* Tamaño por defecto de la imagen */
+            height: auto;
+            object-fit: contain;
+            display: none;
+        }
+
+        /* Media query para dispositivos móviles */
+        @media (max-width: 576px) {
+            #imagen-vista-previa {
+                width: 150px; /* Reduce aún más el tamaño de la imagen en móviles */
+            }
+        }
+
+        /* Estilo para el campo de selección de categorías */
+        select.form-control {
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+
+        /* Agrupar el input de imagen y la vista previa */
+        .imagen-input-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .imagen-input-group .form-control {
+            width: 70%; /* Hacer que el campo de input sea más estrecho */
+            margin-right: 20px; /* Espacio entre el input y la imagen */
+        }
+
+        /* Responsividad: columnas en dispositivos grandes */
+        @media (min-width: 768px) {
+            .form-row {
+                display: flex;
+                justify-content: space-between;
+            }
+            .form-row .col-md-6 {
+                width: 48%;
+            }
+            .form-row .col-md-12 {
+                width: 100%;
+            }
+        }
+
+        /* Adaptar el botón a pantallas pequeñas */
+        @media (max-width: 576px) {
+            .btn-top-right {
+                top: 10px;
+                right: 10px;
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+
+            .container {
+                padding: 20px;
+                margin-top: 10px;
+            }
+
+            h2 {
+                font-size: 1.25rem;
+            }
+
+            .form-control, .form-control-file {
+                font-size: 0.85rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <!-- Alert de confirmación -->
+    <div id="alerta" class="alert alert-success mt-4 d-none" role="alert">
+        Producto registrado exitosamente.
+    </div>
+    <!-- Botón para "Guardar Producto" en la parte superior derecha dentro del formulario -->
+    <form th:action="@{/actualizarProducto/{id}(id=${producto.id})}" th:object="${producto}" method="post" enctype="multipart/form-data">
+        <!-- Campo oculto para simular PUT -->
+        <input type="hidden" name="_method" value="PUT" />
+    
+        <h2>Actualizar Producto</h2>
+    
+        <!-- Los campos del formulario para actualizar -->
+        <div class="form-group mb-3">
+            <label for="nombre">Nombre del Producto:</label>
+            <input type="text" name="nombre" class="form-control" id="nombre" th:field="*{nombre}" placeholder="Nombre del producto" required>
+        </div>
+    
+        <div class="form-group mb-3">
+            <label for="descripcion">Descripción:</label>
+            <textarea class="form-control" name="descripcion" id="descripcion" th:field="*{descripcion}" placeholder="Descripción del producto" required></textarea>
+        </div>
+    
+        <div class="form-group mb-3">
+            <label for="precio">Precio:</label>
+            <input type="number" name="precio" class="form-control" id="precio" th:field="*{precio}" placeholder="Precio" step="0.01" required>
+        </div>
+    
+        <div class="form-row mb-3">
+            <div class="col-md-6">
+                <label for="stock">Stock:</label>
+                <input type="number" name="stock" class="form-control" id="stock" th:field="*{stock}" placeholder="Cantidad en stock" required>
+            </div>
+    
+            <div class="col-md-6">
+                <label for="descuento">Descuento:</label>
+                <input type="number" name="descuento" class="form-control" id="descuento" th:field="*{descuento}" placeholder="Porcentaje de descuento">
+            </div>
+        </div>
+    
+        <!-- Agrupar el campo de imagen y la vista previa -->
+        <div class="form-group mb-3 imagen-input-group">
+            <label for="imagen1">Imagen:</label>
+            <input type="file" name="imagen1" class="form-control" id="imagen1" accept="image/*" onchange="mostrarVistaPrevia(event)">
+            <!-- Vista previa de la imagen seleccionada -->
+            <img id="imagen-vista-previa" src="" alt="Vista previa de la imagen" />
+        </div>
+    
+        <!-- El ID del producto para que el controlador sepa qué producto actualizar -->
+        <input type="hidden" name="id" th:value="${producto.id}" />
+    
+        <button type="submit" class="btn btn-primary btn-top-right">Actualizar Producto</button>
+    </form>
+
+    
+</div>
+
+<!-- Script para manejar la vista previa -->
+<script>
+    function mostrarVistaPrevia(event) {
+        var input = event.target;
+        var files = input.files;
+        var imgPreview = document.getElementById('imagen-vista-previa');
+        
+        // Limpiar cualquier vista previa anterior
+        imgPreview.style.display = 'block';
+        
+        if (files && files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                imgPreview.src = e.target.result;
+            };
+            
+            reader.readAsDataURL(files[0]);
+        }
+    }
+</script>
+
+<!-- Bootstrap JS y script de confirmación -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.getElementById("miFormulario").addEventListener("submit", function(event) {
+        event.preventDefault();
+        document.getElementById("alerta").classList.remove("d-none");
+        setTimeout(function() {
+            document.getElementById("miFormulario").submit();
+        }, 2000);
+    });
+</script>
+
+ <!-- animacion de cargando pagina -->
+ <div class="preloader-wrapper">
+    <div class="preloader">
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  
+  <script th:src="@{/js/jquery-1.11.0.min.js}"></script>
+  
+  <script th:src="@{/js/swiper-bundle.min.js}"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script> -->
+  
+  <script th:src="@{/css/bootstrap-5-3-3/js/bootstrap.bundle.min.js}" ></script>
+  <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script> -->
+  
+  <script th:src="@{/js/plugins.js}"></script>
+  <script th:src="@{/js/script.js}"></script
+
+</body>
+</html>

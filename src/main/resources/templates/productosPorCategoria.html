@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Productos - [[${categoria}]]</title>
+</head>
+<body>
+<h1>Productos en la categoría [[${categoria}]]</h1>
+
+<div th:if="${productos.isEmpty()}">
+    <p>No hay productos en esta categoría.</p>
+</div>
+
+<div th:if="${!productos.isEmpty()}">
+    <ul>
+        <li th:each="producto : ${productos}">
+            <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
+            <p th:text="${producto.descripcion}">Descripción</p>
+            <p>Precio: <span th:text="${producto.precio}">Precio</span></p>
+            <!--<img th:src="'/img/' + ${producto.imagen1}" alt="Imagen del Producto">-->
+        </li>
+    </ul>
+</div>
+</body>
+</html>
+

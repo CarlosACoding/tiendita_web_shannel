@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procesar Pagos</title>
+    <!-- Vinculando Bootstrap y FontAwesome para los íconos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Estilos para la cabecera flotante */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .header .logo {
+            height: 35px;
+        }
+
+        /* Contenedor de la información de contacto en la cabecera */
+        .header .contact-info {
+            color: #333;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column; /* Apilado vertical */
+            align-items: flex-end; /* Alinear a la derecha */
+            text-align: right;
+        }
+        .header .contact-info i {
+            margin-right: 5px;
+        }
+
+        /* Ajustes para las secciones del cuerpo */
+        .section {
+            padding-top: 90px; /* Espacio suficiente para que no se cubran las secciones */
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        /* Contenedores de las secciones centrados y con espacio entre elementos */
+        .form-container, .cart-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        /* Alineación de las secciones */
+        .container-center {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Ajustes para los inputs más altos y otros cambios de estilo */
+        .form-control-lg {
+            height: 10px;
+            font-size: 14px;
+            padding: 7px;
+        }
+
+        /* Títulos más pequeños y en negrita */
+        .form-label {
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Estilo de los botones */
+        .btn-custom {
+            width: auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            background-color: #333;
+            border-color: #333;
+            color: #fff;
+        }
+        .btn-custom:hover {
+            background-color: #555;
+            border-color: #555;
+        }
+
+        /* Cart item con separaciones entre los productos */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px; /* Reducimos la separación */
+        }
+
+        .cart-item img {
+            width: 160px; /* Aumentamos el tamaño de la imagen a 160px */
+            height: 160px;
+            object-fit: cover;
+            margin-right: 15px; /* Reducimos el espacio entre la imagen y los textos */
+        }
+
+        .cart-item div {
+            max-width: 400px; /* Reducimos el ancho de los textos */
+            margin-left: 10px;
+            word-wrap: break-word; /* Rompe las palabras largas */
+            word-break: break-word; /* Asegura que las palabras largas se dividan */
+        }
+
+        /* Eliminar interlineado en los textos */
+        .cart-item p, .cart-item h5 {
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+
+        /* Línea de separación más arriba */
+        .line {
+            border-bottom: 2px solid #ccc;
+            margin: 10px 0; /* Reducimos la distancia de la línea con los productos */
+        }
+
+        /* Botón de WhatsApp flotante */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50%; /* Lo hacemos completamente redondo */
+            padding: 20px;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 9999;
+        }
+        .whatsapp-button:hover {
+            background-color: #128C7E;
+        }
+
+        /* Estilos para el texto informativo */
+        .info-text {
+            font-size: 12px;
+            color: #777;
+            margin-top: 10px;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+        }
+
+            
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Cabecera flotante -->
+    <!-- Incluir el fragmento de la cabecera principal de las paginas -->
+    <div th:replace="~{fragmentos/cabeza2 :: header2}"></div>
+
+        <!-- Asegúrate de tener estos estilos en tu CSS -->
+    <style>
+        .contact-info p {
+            margin: 0;
+        }
+        
+        .phone-number {
+            font-size: 14px;
+        }
+
+        .flag-icon {
+            margin-left: 10px;
+        }
+    </style>
+
+    
+
+    <!-- Cuerpo -->
+    <div class="container section container-center">
+
+        <!-- Fila de dos columnas -->
+        <div class="row" >
+            <!-- Sección 1: Formulario de información personal -->
+            <div class="col-md-7"> 
+                <div class="form-container pastel">
+                    <h4 class="mb-4" style="font-size: 18px; font-weight: 600; color: #333;">Verifique y actualice su información personal</h4>
+                   
+                    <form id="personal-form" th:action="@{/actualizarYComprar/{userId}(userId=${usuario.id})}" th:object="${usuario}" method="post">
+                        <input type="hidden" name="_method" value="PUT" />
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input th:field="*{email}" type="email" class="form-control form-control-lg" id="email" 
+                                   th:disabled="${usuario.email != null and usuario.email != ''}" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input th:field="*{nombre}" type="text" class="form-control form-control-lg" id="nombre" 
+                                           th:disabled="${usuario.nombre != null and usuario.nombre != ''}" required oninput="convertToUpperCase(this)">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="apellidos" class="form-label">Apellidos</label>
+                                    <input th:field="*{apellidos}" type="text" class="form-control form-control-lg" id="apellidos" 
+                                           th:disabled="${usuario.apellidos != null and usuario.apellidos != ''}" required oninput="convertToUpperCase(this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="cedula" class="form-label">Cédula</label>
+                                    <input th:field="*{cedula}" type="text" class="form-control form-control-lg" id="cedula" 
+                                           th:disabled="${usuario.cedula != null and usuario.cedula != ''}" maxlength="10" required oninput="validateNumberInput(this)">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="celular" class="form-label">Celular</label>
+                                    <input th:field="*{telefono}" type="text" class="form-control form-control-lg" id="celular" 
+                                           th:disabled="${usuario.telefono != null and usuario.telefono != ''}" maxlength="10" required oninput="validateNumberInput(this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección de envío</label>
+                            <input th:field="*{direccion}" type="text" class="form-control form-control-lg" id="direccion"  
+                                   th:disabled="${usuario.direccion != null and usuario.direccion != ''}" required oninput="convertToUpperCase(this)">
+                        </div>
+            
+                        <!-- Información adicional -->
+                        <div class="info-text">
+                            <p><strong>¿Por qué pedimos esta información?</strong></p>
+                            <ul>
+                                <li>Para poder entregar el producto de manera segura.</li>
+                                <li>Para poder contactarnos contigo rápidamente.</li>                            
+                                <li>Actualmente, los pagos se realizan por depósito o transferencia bancaria.</li>
+                                <li>La logística de los pedidos se maneja por interno.</li>
+                            </ul>
+                        </div>
+            
+                        <!-- Casilla de aceptación de condiciones -->
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="" id="accept-conditions" required>
+                            <label class="form-check-label" for="accept-conditions">
+                                He leído y acepto las condiciones.
+                            </label>
+                        </div>
+
+            
+                        <button  type="submit" class="btn btn-custom" id="submit-btn">Guardar y Comprar</button>
+                    </form>
+
+                </div>
+            </div>
+
+            <!-- JavaScript para las validaciones y conversión a mayúsculas del formulario-->
+            <script>
+                // Función para convertir texto a mayúsculas
+                function convertToUpperCase(input) {
+                    input.value = input.value.toUpperCase();
+                }
+
+                // Función para validar que solo se introduzcan números
+                function validateNumberInput(input) {
+                    input.value = input.value.replace(/[^0-9]/g, '');  // Reemplaza cualquier carácter no numérico
+                }
+  
+
+            </script>
+
+            <style>
+                /* Estilos generales para la línea de separación */
+                .line {
+                    width: 90%; /* La línea ocupa todo el ancho del contenedor */
+                    height: 2px; /* Puedes ajustar la altura de la línea */
+                    background-color: #333; /* Color de la línea */
+                    margin-top: 2px; /* Agrega un margen en la parte superior para separar la línea de los productos */
+                    margin-bottom: 2px; /* Espacio debajo de la línea */
+                    clear: both; /* Asegura que la línea se coloque después de los elementos flotantes */
+                }
+
+                /* Asegúrate de que el contenedor tenga suficiente espacio y no esté ocultando contenido */
+                .cart-item {
+                    margin-bottom: 2px; /* Espaciado entre los items */
+                    padding-bottom: 2px; /* Agregar padding en la parte inferior para que la línea se vea claramente */
+                    display: block; /* Esto asegura que los elementos no estén alineados horizontalmente */
+                    clear: both; /* Asegura que los elementos estén alineados verticalmente */
+                }
+
+                .price-total {
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: #333;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    background-color: #f7f7f7;
+                    padding: 10px;
+                    border-radius: 5px;
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+                    margin-top: 20px;
+                    margin-right: 40px;
+                }
+
+                .price-total span {
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: #2c3e50;
+                }
+
+            </style>
+
+            <!-- Sección 2: Resumen de compra -->
+                <div class="col-md-5 cart-container pastel"> <!-- Hacemos la sección de carrito más estrecha -->
+                    <h4 class="mb-4" style="font-size: 18px; font-weight: 600; color: #333;">Resumen de compra</h4>
+                    <div style="padding-left: 80px;">
+
+                        <!-- Iterar sobre los productos en el carrito -->
+                        <div class="cart-item container-center" th:each="item : ${productosCarrito}">
+                            <div class="d-flex">
+                                <img th:src="@{${item.producto.imagen1}}" alt="Producto" class="img-fluid me-3" style="max-width: 100px;">
+                                <div>
+                                    <h5 style="font-size: 16px; font-weight: 600;" th:text="${item.producto.nombre}">Nombre del Producto</h5>
+                                    <p style="font-size: 14px;" th:text="${item.producto.descripcion}">Descripción del producto.</p>
+                                    <p><strong>Talla:</strong> <span th:text="${item.talla}">M</span></p>
+                                    <p><strong>Color:</strong> <span th:text="${item.color}">Azul</span></p>
+                                    <p><strong>Cantidad:</strong> <span th:text="${item.cantidad}">Azul</span></p>
+                                    <p><strong>Precio unitario:</strong> <span th:text="${item.producto.precio}">Azul</span></p>
+                                    <p><strong>Sub total:</strong> <span th:text="${item.producto.precio * item.cantidad}">Azul</span></p>
+                                </div>
+                            </div>
+                            <!-- Línea de separación -->
+                            <div class="line"></div>
+                        </div>
+                        <!-- Fin de la iteración -->
+                        <p  class="price-total"><strong>Total:</strong><span th:text="'$ ' + ${totalCompra}">Azul</span></p>
+                    </div>
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Botón flotante de WhatsApp -->
+    <a href="https://wa.me/5930982864870" target="_blank" class="position-fixed" style="bottom: 20px; right: 20px; width: 50px; height: 50px; z-index: 1000;">
+        <img th:src="@{/img/whasap.png}" alt="WhatsApp" style="width: 100%; height: 100%; border-radius: 50%;">
+    </a>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+
+
