@@ -136,14 +136,14 @@ public class ControladorUsuario {
             model.addAttribute("totalCompra", totalDefinitivo); // Añadir el total al modelo
             //System.out.println(totalDefinitivo);
 
-            return "/pagos";
+            return "pagos";
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
 
         }
 
-        return "/pagos";
+        return "pagos";
     }
     //
 
@@ -174,13 +174,13 @@ public class ControladorUsuario {
             Usuario usuarioId = servicioUsuario.obtenerUsuariosId(userId);
             model.addAttribute("usuario", usuarioId);
 
-            return "/actualizarInfo";
+            return "actualizarInfo";
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
 
         }
-        return "/actualizarInfo";
+        return "actualizarInfo";
     }
 
     @PutMapping("/actualizarUsuario/{userId}")
@@ -421,7 +421,7 @@ public class ControladorUsuario {
             // Si ocurre un error, mostrar un mensaje y regresar a la vista de registro
 
             System.out.println(e.getMessage());
-            return "redirect:/registroInicio";  // Volver a la página de registro si hubo un error
+            return "redirect:registroInicio";  // Volver a la página de registro si hubo un error
         }
     }
 }

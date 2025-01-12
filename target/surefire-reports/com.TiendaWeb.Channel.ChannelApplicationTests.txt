@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.TiendaWeb.Channel.ChannelApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.85 s -- in com.TiendaWeb.Channel.ChannelApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.14 s -- in com.TiendaWeb.Channel.ChannelApplicationTests
