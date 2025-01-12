@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos de clientes</title>
+    <!-- Vinculando Bootstrap y FontAwesome para los íconos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+
+    <style>
+        /* Estilos Globales */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* Animaciones y Transiciones */
+        .producto-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .producto-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .usuario-info {
+            position: relative;
+            padding: 20px;
+            background-color: #f8f8f8;
+            margin-right: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Botón pequeño "Pagado" en la parte inferior derecha */
+        .pagado-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            background-color: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50px;
+            border: none;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            
+        }
+
+        .pagado-btn:hover {
+            background-color: #218838;
+            cursor: pointer;
+        }
+
+        .compras-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .producto-item img {
+            width: 150px; /* Limitar el tamaño máximo de la imagen */
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* Ajustes de los textos en los productos */
+        .producto-item h5 {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .producto-item p, .producto-item span {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Ajustar interlineado en las secciones de medidas, color y cantidad */
+        .producto-item p, .producto-item span {
+            line-height: 1.5; /* Reducir mucho el interlineado */
+        }
+
+        .producto-item {
+            font-size: 12px; /* Ajuste del tamaño de fuente para todo el producto */
+        }
+
+        /* Contenedor de productos con scroll horizontal */
+        .productos-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+        }
+
+        .producto-item {
+            flex-shrink: 0;
+            width: 200px;
+        }
+
+        /* Estilo del texto "Total a Pagar" junto al botón Pagado */
+        .total-pagar {
+            position: absolute;
+            bottom: 10px;
+            right: 70px; /* Colocar cerca del botón Pagado */
+            font-size: 12px;
+            
+            background-color: #28a745; /* Mismo color que el botón */
+            color: white;
+            padding: 5px ;
+            margin-right: 10px;
+            border-radius: 50px;
+
+            display: inline-block;
+            text-align: center;
+            
+            transition: background-color 0.3s ease;
+        }
+
+        .total-pagar:hover {
+            background-color: #218838; /* Mismo efecto al pasar el ratón */
+        }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                width: 90%;
+            }
+
+            .usuario-info {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- <div th:replace="~{fragmentos/cabeza2 :: header2}"></div> -->
+<div>
+    <!-- Definir el tamaño personalizado con CSS -->
+    <style>
+        .custom-logo {
+            width: 60px;  /* Ajusta el tamaño según tus necesidades */
+            height: auto;  /* Mantener la relación de aspecto */
+        }
+
+        /* Reducir el padding de la cabecera */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            font-size: 13px; /* Reducimos el tamaño de la fuente */
+            padding: 20px 15px; /* Reducir padding para una cabecera más compacta */
+            font-size: 12px;    /* Reducir el tamaño de la fuente en la cabecera */
+            display: flex;
+            justify-content: space-between; /* Para distribuir los elementos a los lados */
+            align-items: center; /* Centrar los elementos verticalmente */
+        }
+
+        .contact-info p {
+            margin: 0; /* Eliminar márgenes innecesarios */
+            font-size: 12px;  /* Reducir tamaño de fuente de la información de contacto */
+        }
+
+        .contact-info .phone-number {
+            font-size: 14px; /* Aumentar ligeramente el tamaño del teléfono */
+        }
+
+        .header .main-logo a {
+            display: flex;
+            justify-content: center; /* Centrar logo */
+            align-items: center;
+        }
+
+        .contact-info i {
+            margin-right: 5px; /* Separar un poco el icono del texto */
+        }
+
+        .contact-info img {
+            margin-left: 5px; /* Separar un poco la bandera del texto */
+        }
+
+        /* Estilos para el título centrado en la cabecera */
+        .header-title {
+            flex-grow: 1;  /* Toma el espacio disponible para centrar */
+            text-align: center; /* Centrar el texto */
+            font-size: 20px; /* Tamaño del texto */
+            font-weight: bold; /* Establecer texto en negrita */
+            color: #333; /* Color del texto */
+        }
+
+        /* Estilos responsive para móviles */
+        @media (max-width: 768px) {
+            .custom-logo {
+                width: 50px;  /* Reducir el tamaño del logo en móviles */
+            }
+
+            .contact-info p {
+                font-size: 10px;  /* Reducir el tamaño de la fuente de contacto en móviles */
+            }
+
+            /* Cambiar el tamaño del título en móviles */
+            .header-title h2 {
+                font-size: 16px; /* Hacer más pequeño el tamaño del título en dispositivos móviles */
+            }
+        }
+    </style>
+
+    <!-- Cabecera con logo, título y contacto -->
+    <div class="header">
+        <!-- Logo o marca principal -->
+        <div class="text-center">
+            <div class="main-logo">
+                <a th:href="@{/}">
+                    <img th:src="@{/img/logoPrincipal.png}" alt="logo" class="img-fluid custom-logo">
+                </a>
+            </div>
+        </div>
+
+        <!-- Título "Ventas de productos" centrado -->
+        <div class="header-title">
+            <h3>Pedidos de los Usuarios</h3>
+        </div>
+
+        <!-- Información de contacto -->
+        <div class="contact-info text-end">
+            <p>¿Tienes alguna duda?</p>
+            <p>
+                <span class="phone-number">
+                    <i class="fas fa-phone-alt"></i> 593 982 864 870
+                </span>
+                <span class="flag-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Flag_of_Ecuador.svg/1280px-Flag_of_Ecuador.svg.png" alt="Bandera de Ecuador" width="20" height="20">
+                </span>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<br>
+<br>
+<br>
+
+<!-- Contenedor de los productos y datos del usuario -->
+<div class="container" th:each="usuarioConProductos : ${usuarioConProductosList}">
+    <div class="row">
+        <!-- Datos del Usuario -->
+        <div class="col-md-4">
+            <div class="p-3 bg-light shadow rounded usuario-info">
+                <h5 th:text="${usuarioConProductos.usuario.nombre} + ' ' + ${usuarioConProductos.usuario.apellidos}">Juan Pérez</h5>
+                <p><strong>Email:</strong> <span style="font-size: 14px;" th:text="${usuarioConProductos.usuario.email}">juan@ejemplo.com</span></p>
+                <p><strong>Teléfono:</strong> <a target="_blank" th:href="${'https://wa.me/' + usuarioConProductos.usuario.telefono}"> <span style="font-size: 14px;" th:text="${usuarioConProductos.usuario.telefono} + '- Contactar para proceder con el pago y entrega de los productos'">+123 456 7890</span> </a> </p> 
+                <p><strong>Identificacion:</strong> <span style="font-size: 14px;" th:text="${usuarioConProductos.usuario.cedula}">+123 456 7890</span></p>
+                <p><strong>Dirección:</strong> <span style="font-size: 14px;" th:text="${usuarioConProductos.usuario.direccion}">Calle Ficticia 123, Ciudad</span></p>
+                <input id="idCarritoCompras" type="hidden" th:value="${usuarioConProductos.id}">
+
+                <!-- Botón Pagado y Total a Pagar -->
+                <button  class="pagado-btn">Procesar</button>
+                <!-- Mostrar el total a pagar -->
+                <span class="total-pagar" th:text="'A Pagar: $' + ${totalCompra}"> A Pagar: $100.00</span>
+
+            </div>
+        </div>
+
+        <!-- Compras del Usuario -->
+        <div class="col-md-8">
+            <div class="p-3 bg-light shadow rounded compras-info">
+                <h4  style="font-size: 16px;">Productos Pedidos</h4>
+
+                <!-- Contenedor de los productos con scroll horizontal solo en esta sección -->
+                <div class="productos-scroll">
+                    <!-- Iterar sobre los productos -->
+                    <div class="producto-item" th:each="producto, iterStat : ${usuarioConProductos.productos}">
+                        <div class="p-3 bg-white shadow-sm rounded">
+                            <img th:src="@{${producto.imagen1}}" alt="Imagen del Producto">
+                            <h4 th:text="${producto.nombre}">Camiseta Roja</h4>
+                            <p th:text="${producto.descripcion}">Camiseta de algodón de color rojo.</p>
+                            <span>Medidas: ...</span>
+                            <span>Color: ...</span>
+                            <p th:text="${usuarioConProductos.cantidades[iterStat.index]} + ' ' + 'Unidades'">Camiseta de algodón de color rojo.</p>
+                            <strong><span th:text="${producto.precio} + ' ' + '$'" >$20.00</span></strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.querySelector('.pagado-btn').addEventListener('click', function() {
+        // Capturamos el valor del input oculto
+        const idCarritoCompras = document.querySelector('#idCarritoCompras').value;
+
+        console.log("Valor capturado del input:", idCarritoCompras);  // Verifica qué valor se está capturando
+
+        // Limpiar el valor capturado, eliminando los corchetes y espacios innecesarios
+        const cleanedValue = idCarritoCompras.replace(/[\[\]']+/g, '');  // Eliminar corchetes y comillas si existen
+
+        console.log("Valor después de limpiar los corchetes:", cleanedValue);  // Verifica el valor después de limpiar
+
+        // Convertir la cadena limpia en un array de números
+        const idCarritoArray = cleanedValue.split(',')
+            .map(value => {
+                // Eliminar espacios innecesarios
+                const trimmedValue = value.trim();
+
+                // Convertir a número
+                const parsedValue = parseInt(trimmedValue, 10);
+
+                // Verificar si el valor es un número válido
+                if (isNaN(parsedValue)) {
+                    console.error(`Valor no numérico encontrado: ${trimmedValue}`);  // Verifica si hay algún valor inválido
+                    return null;  // En caso de valor inválido, lo reemplazamos con null
+                }
+
+                return parsedValue;  // Si es válido, lo retornamos como número
+            })
+            .filter(value => value !== null);  // Filtrar los valores nulos (los inválidos)
+
+        console.log("IDs enviados (sin valores inválidos):", idCarritoArray);  // Verifica el array limpio
+
+
+    fetch('/procesar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ idCarrito: idCarritoArray })  // Enviar como JSON
+    })
+    .then(response => response.text())
+    .then(data => {        
+        //alert("sads");
+
+        // Primero recargamos la página
+        window.location.reload();
+
+        // Usamos localStorage para guardar que debemos mostrar la notificación
+        localStorage.setItem('showNotification', 'true');
+      
+
+    })
+    .catch(error => {
+        console.error('Error al eliminar los productos:', error);
+        alert('Hubo un error al eliminar los productos');
+    });
+});
+</script>
+
+<script>
+    window.addEventListener('load', function() {
+        // Comprobamos si la clave 'showNotification' existe en localStorage
+        if (localStorage.getItem('showNotification') === 'true') {
+            // Mostramos la notificación
+            var notyf = new Notyf({
+                duration: 3000,  // Duración de la notificación en milisegundos
+                position: { x: 'right', y: 'top' },  // Posición de la notificación
+                ripple: true,  // Efecto de onda al aparecer
+            });
+
+            notyf.success('Compra procesada Exitosamente! Ir a Ventas');
+
+            // Eliminar la clave de localStorage después de mostrar la notificación
+            localStorage.removeItem('showNotification');
+            localStorage.removeItem('pedidoCarrito');
+        }
+    });
+</script>
+
+
+<!-- Botón flotante de WhatsApp -->
+<a href="https://wa.me/5930982864870" target="_blank" class="position-fixed" style="bottom: 20px; right: 20px; width: 50px; height: 50px; z-index: 1000;">
+    <img th:src="@{/img/whasap.png}" alt="WhatsApp" style="width: 100%; height: 100%; border-radius: 50%;">
+</a>
+
+<!-- Scripts de Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+</body>
+</html>
