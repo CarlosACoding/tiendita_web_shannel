@@ -387,7 +387,7 @@ public class ControladorUsuario {
         } else {
             // Si el usuario no existe o la contraseña es incorrecta, agregar un mensaje de error
             redirectAttributes.addFlashAttribute("error", true);
-            return "redirect:usuarioInicio"; // Redirige a la página de login
+            return "redirect:/usuarioInicio"; // Redirige a la página de login
         }
     }
 
@@ -421,7 +421,7 @@ public class ControladorUsuario {
             // Si ocurre un error, mostrar un mensaje y regresar a la vista de registro
 
             System.out.println(e.getMessage());
-            return "redirect:registroInicio";  // Volver a la página de registro si hubo un error
+            return "redirect:/registroInicio";  // Volver a la página de registro si hubo un error
         }
     }
 }
