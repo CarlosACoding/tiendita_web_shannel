@@ -162,6 +162,66 @@ public class ControladorRegistro {
             return "error";
         }
     }
+
+    @GetMapping("/acerca_nosotros")
+    public String acercaNosotros() {
+        return "acerca_nosotros"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/condiciones")
+    public String condiciones() {
+        return "condiciones"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/nuestro_proyecto")
+    public String nuestroProyecto() {
+        return "nuestro_proyecto"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/carrera")
+    public String carrera() {
+        return "carrera"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/soporte")
+    public String soporte() {
+        return "soporte"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/mas")
+    public String mas() {
+        return "mas"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/faq")
+    public String faq() {
+        return "faq"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/contactos")
+    public String contactos() {
+        return "contactos"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/politica-privacidad")
+    public String politicaPrivacidad() {
+        return "politica-privacidad"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/chats")
+    public String chats() {
+        return "chats"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/guias")
+    public String guias() {
+        return "guias"; // Nombre del archivo .html en templates
+    }
+
+    @GetMapping("/informacion-envios")
+    public String informacionEnvios() {
+        return "informacion-envios"; // Nombre del archivo .html en templates
+    }
 }
 
 
