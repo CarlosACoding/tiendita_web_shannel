@@ -63,7 +63,7 @@
                                                 </div>
                                                 <h3 class="display-4" th:text="${producto.nombre}"></h3>
                                                 <p th:text="${producto.descripcion}"></p>
-                                                <!-- Ir a comprar 50% descuento-->    
+                                                <!-- Ir a comprar 50% descuento-->
                                                 <a th:href="@{'/detalleProducto/' + ${producto.id}}"
                                                     target="_blank"
                                                     class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1 px-4 py-3 mt-3">Comprar
@@ -403,6 +403,10 @@
 
     <script th:src="@{/js/jquery-1.11.0.min.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+
+    <!-- Popper.js (necesario para componentes como los carruseles) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 
 
     <script th:src="@{/js/jquery-1.11.0.min.js}"></script>
