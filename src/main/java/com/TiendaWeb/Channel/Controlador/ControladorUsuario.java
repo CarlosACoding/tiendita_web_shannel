@@ -219,6 +219,7 @@ public class ControladorUsuario {
         List<Producto> productosConDescuento = productoService.obtenerTresProductosConDescuento50(); // Asegúrate de tener este metodo en tu servicio
         model.addAttribute("productosConDescuento", productosConDescuento); // Añadir los productos al modelo
 
+        System.out.println("prodcdecito d222222222escuento:::::::::::::::::::::::::" + productosConDescuento);
         // Obtener la lista de productos con descuento del 50% solo 2
         List<Producto> productosConDescuento2 = productoService.obtenerDosProductosConDescuento50(); // Asegúrate de tener este metodo en tu servicio
         model.addAttribute("productosConDescuento2", productosConDescuento2); // Añadir los productos al modelo
@@ -245,6 +246,7 @@ public class ControladorUsuario {
         List<Producto> productosConDescuento = productoService.obtenerTresProductosConDescuento50(); // Asegúrate de tener este metodo en tu servicio
         model.addAttribute("productosConDescuento", productosConDescuento); // Añadir los productos al modelo
 
+        System.out.println("prodcdecito descuento:::::::::::::::::::::::::" + productosConDescuento);
         // Obtener la lista de productos con descuento del 50% solo 2
         List<Producto> productosConDescuento2 = productoService.obtenerDosProductosConDescuento50(); // Asegúrate de tener este metodo en tu servicio
         model.addAttribute("productosConDescuento2", productosConDescuento2); // Añadir los productos al modelo

@@ -47,7 +47,7 @@
 
 
     <!-- Inicio de las sesiones -->
-    <section >
+    <section th:style="'background-image:url(' + @{/img/background-pattern.jpg} + '); background-repeat: no-repeat; background-size: cover;'">
         <div class="container-fluid">
             <div class="row">
                 <!-- Banner 1: Productos con descuento -->
@@ -55,7 +55,7 @@
                     <div class="banner-ad large bg-info block-1" style="height: 520px;">
                         <div class="swiper main-swiper">
                             <div class="swiper-wrapper">
-                                <div th:each="producto : ${productosConDescuento}">
+                                <th:block th:each="producto : ${productosConDescuento}">
                                     <div class="swiper-slide">
                                         <div class="row h-100 d-flex align-items-center banner-content p-4">
                                             <div class="content-wrapper col-lg-7">
@@ -85,7 +85,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </th:block>
                             </div>
                         </div>
                         <div class="swiper-pagination"></div>
@@ -94,7 +94,7 @@
 
                 <!-- Banner 2 y 3, cada uno ocupando el 100% en móviles -->
                 <div class="col-lg-4 col-12 mb-3">
-                    <div th:each="producto2 : ${productosConDescuento2}">
+                    <th:block th:each="producto2 : ${productosConDescuento2}">
                         <div class="banner-ad bg-success-subtle position-relative overflow-hidden mb-3"
                             style="height: 251px;">
                             <img th:src="@{${producto2.imagen1}}"
@@ -117,7 +117,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </th:block>
                 </div>
             </div>
         </div>
