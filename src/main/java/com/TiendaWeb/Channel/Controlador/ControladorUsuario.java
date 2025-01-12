@@ -236,7 +236,7 @@ public class ControladorUsuario {
         model.addAttribute("usuarios", usuarios);
 
 
-        return "/index";  // Nombre de la plantilla Thymeleaf (index.html)
+        return "index";  // Nombre de la plantilla Thymeleaf (index.html)
     }
     // Vista principal para los usuarios
     @GetMapping("/session")
@@ -274,7 +274,7 @@ public class ControladorUsuario {
             model.addAttribute("isUserLoggedIn", false);
         }
 
-        return "/index";  // Nombre de la plantilla Thymeleaf (index.html)
+        return "index";  // Nombre de la plantilla Thymeleaf (index.html)
     }
 
     @GetMapping("/hombres")
